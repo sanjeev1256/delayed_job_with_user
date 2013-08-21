@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.description = "Small wrapper around Delayed::Job to instantiate current_user in Job"
   spec.email = ['igorsuleymanoff@gmail.com']
   
-  spec.files = %w(README.md delayed_job_with_user.gemspec, init.rb)
+  spec.files = %w(README.md delayed_job_with_user.gemspec init.rb)
   spec.files += Dir.glob('{lib}/**/*')
 
   spec.homepage = 'http://github.com/radiohead/delayed_job_with_user'
