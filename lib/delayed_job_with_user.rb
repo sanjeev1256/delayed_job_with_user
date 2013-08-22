@@ -39,7 +39,7 @@ module DelayedJobWithUser
     def initialize(target, options)
       @target = target
       @options = options
-      @user_id = User.current_user.id || -1
+      @user_id = User.current_user.try(:id) || -1
     end
 
     def method_missing(method, *args)
