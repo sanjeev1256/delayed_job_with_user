@@ -17,6 +17,7 @@ module DelayedJobWithUser
       self.object = object
       self.args = args
       self.method_name = method_name.to_sym
+      self.display_name = "#{object.class.to_s}::#{object.id if object.respond_to?(:id)}::#{method_name}"
     end
 
     def before(job)
