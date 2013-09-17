@@ -5,7 +5,7 @@ module DelayedJobWithUser
   extend ActiveSupport::Concern
 
   class JobWithUser
-    attr_accessor :object, :method_name, :args
+    attr_accessor :object, :method_name, :args, :display_name
 
     def initialize(object, method_name, args)
       raise NoMethodError, "undefined method `#{method_name}' for #{object.inspect}" unless object.respond_to?(method_name, true)
