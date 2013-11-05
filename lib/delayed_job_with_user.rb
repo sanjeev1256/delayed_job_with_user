@@ -14,9 +14,13 @@ module DelayedJobWithUser
         raise(ArgumentError, 'Jobs cannot be created for records before they\'ve been persisted')
       end
 
-      self.object = object
-      self.args = args
-      self.method_name = method_name.to_sym
+      @object = object
+      @args = args
+      @method_name = method_name.to_sym
+    end
+
+    def inspect
+      "#{@object.class}::#{@method_name}(#{@args.join(",")})"
     end
 
     def before(job)
@@ -31,7 +35,7 @@ module DelayedJobWithUser
     end
 
     def perform
-      object.send(method_name, *args) if object
+      @object.send(method_name, *args) if @object
     end
   end
 
