@@ -5,7 +5,7 @@ module DelayedJobWithUser
   extend ActiveSupport::Concern
 
   class JobWithUser
-    attr_accessor :object, :method_name, :args, :display_name
+    attr_accessor :object, :method_name, :args
 
     def initialize(object, method_name, args)
       raise NoMethodError, "undefined method `#{method_name}' for #{object.inspect}" unless object.respond_to?(method_name, true)
@@ -14,10 +14,13 @@ module DelayedJobWithUser
         raise(ArgumentError, 'Jobs cannot be created for records before they\'ve been persisted')
       end
 
-      self.object = object
-      self.args = args
-      self.method_name = method_name.to_sym
-      self.display_name = "#{object.class.to_s}::#{object.id if object.respond_to?(:id)}::#{method_name}"
+      @object = object
+      @args = args
+      @method_name = method_name.to_sym
+    end
+
+    def inspect
+      "#{@object.class}::#{@method_name}(#{@args.join(",")})"
     end
 
     def before(job)
@@ -32,7 +35,7 @@ module DelayedJobWithUser
     end
 
     def perform
-      object.send(method_name, *args) if object
+      @object.send(method_name, *args) if @object
     end
   end
 
