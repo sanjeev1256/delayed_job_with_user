@@ -1,10 +1,13 @@
 require 'delayed_job'
 require 'active_support/concern'
+require 'delayed_job_callbacks'
 
 module DelayedJobWithUser
   extend ActiveSupport::Concern
 
   class JobWithUser
+    include Delayed::Callbacks::Executor
+
     attr_accessor :object, :method_name, :args
 
     def initialize(object, method_name, args)
@@ -23,6 +26,10 @@ module DelayedJobWithUser
       "#{@object.class}::#{@method_name}(#{@args.join(",")})"
     end
 
+    def enqueue(job)
+      self.execute_callbacks(:enqueue, job, nil)
+    end
+
     def before(job)
       begin
         User.current_user = User.find(job.started_by)
@@ -32,6 +39,24 @@ module DelayedJobWithUser
         # A user is not always required here, so it would be a bad practice to re-raise exception
         # But we need to inform somehow, that user wasn't found
       end
+
+      self.execute_callbacks(:before, job, nil)
+    end
+
+    def after(job)
+      self.execute_callbacks(:after, job, nil)
+    end
+
+    def success(job)
+      self.execute_callbacks(:success, job, nil)
+    end
+
+    def error(job, exception)
+      self.execute_callbacks(:error, job, exception)
+    end
+
+    def failure(job)
+      self.execute_callbacks(:failure, job, nil)
     end
 
     def perform
