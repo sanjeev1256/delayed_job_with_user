@@ -33,6 +33,9 @@ module DelayedJobWithUser
     def before(job)
       begin
         User.current_user = User.find(job.started_by)
+        time_zone = User.current_user.person.time_zone rescue Time.zone.name
+        time_zone_is_valid = time_zone.present? && ActiveSupport::TimeZone.all.include?(ActiveSupport::TimeZone.new(time_zone))
+        Time.zone = time_zone if time_zone_is_valid
       rescue Exception => e
         # "Could not find User with id #{job.started_by}!"
         # TODO: handle this!
