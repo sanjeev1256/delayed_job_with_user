@@ -41,6 +41,7 @@ module DelayedJobWithUser
         # TODO: handle this!
         # A user is not always required here, so it would be a bad practice to re-raise exception
         # But we need to inform somehow, that user wasn't found
+        User.current_user = nil
       end
 
       self.execute_callbacks(:before, job, nil)
@@ -75,8 +76,10 @@ module DelayedJobWithUser
     end
 
     def method_missing(method, *args)
-      job = Delayed::Job.enqueue({:payload_object => JobWithUser.new(@target, method.to_sym, args)}.merge(@options))
-      job.update_attribute(:started_by, @user_id)
+      Delayed::Job.transaction do
+        job = Delayed::Job.enqueue({:payload_object => JobWithUser.new(@target, method.to_sym, args)}.merge(@options))
+        job.update_attribute(:started_by, @user_id)
+      end
     end
   end
 
