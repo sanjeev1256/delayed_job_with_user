@@ -12,11 +12,11 @@ module Delayed
       extend ActiveSupport::Concern
 
       included do
-        CALLBACK_HOOKS.each{ |hook| __define_callbacks(hook) }
+        CALLBACK_HOOKS.each{ |hook| __define_dj_callbacks(hook) }
       end
 
       module ClassMethods
-        def __define_callbacks(hook)
+        def __define_dj_callbacks(hook)
           cb_var = "@@__callbacks_#{hook}"
 
           macro = Proc.new do |*args|
