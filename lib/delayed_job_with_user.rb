@@ -41,7 +41,7 @@ module DelayedJobWithUser
         # TODO: handle this!
         # A user is not always required here, so it would be a bad practice to re-raise exception
         # But we need to inform somehow, that user wasn't found
-        User.current_user = nil
+        User.current_user = nil unless Rails.env.test?
       end
 
       self.execute_callbacks(:before, job, nil)
