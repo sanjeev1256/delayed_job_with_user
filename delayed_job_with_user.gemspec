@@ -1,5 +1,5 @@
 Gem::Specification.new do |spec|
-  spec.add_dependency 'activesupport', ['>= 3.0', '< 5']
+  spec.add_dependency 'activesupport', ['>= 3.0', '< 6']
   spec.add_dependency 'delayed_job', ['>=4.0']
 
   spec.authors = ["Igor Suleymanoff"]
@@ -15,5 +15,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.summary = "Small wrapper around Delayed::Job to instantiate current_user in Job"
-  spec.version = '1.1.0'
+  spec.version = '1.1.1'
 end
