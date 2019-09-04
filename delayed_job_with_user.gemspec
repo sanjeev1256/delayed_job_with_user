@@ -1,5 +1,5 @@
 Gem::Specification.new do |spec|
-  spec.add_dependency 'activesupport', ['>= 3.0', '< 6']
+  spec.add_dependency 'activesupport', ['>= 3.0', '< 7']
   spec.add_dependency 'delayed_job', ['>=4.0']
 
   spec.authors = ["Igor Suleymanoff"]
