@@ -32,6 +32,7 @@ module DelayedJobWithUser
 
     def before(job)
       begin
+        @old_current_user = User.current_user
         User.current_user = User.find(job.started_by)
         time_zone = User.current_user.person.time_zone rescue Time.zone.name
         time_zone_is_valid = time_zone.present? && ActiveSupport::TimeZone.all.include?(ActiveSupport::TimeZone.new(time_zone))
@@ -48,6 +49,7 @@ module DelayedJobWithUser
     end
 
     def after(job)
+      User.current_user = @old_current_user
       self.execute_callbacks(:after, job, nil)
     end
 
