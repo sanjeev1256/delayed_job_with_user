@@ -15,5 +15,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.summary = "Small wrapper around Delayed::Job to instantiate current_user in Job"
-  spec.version = '1.1.1'
+  spec.version = '1.1.2'
 end
